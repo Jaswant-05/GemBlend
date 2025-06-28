@@ -9,7 +9,7 @@ import {
   IconTableColumn,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
-import { BentoGrid, BentoGridItem } from "./ui/bento-grid";
+import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 
 
 export function FeatureBentoGrid() {
@@ -289,10 +289,10 @@ const SkeletonFive = () => {
 };
 const items = [
   {
-    title: "AI Content Generation",
+    title: "Describe Your 3D Object",
     description: (
       <span className="text-sm">
-        Experience the power of AI in generating unique content.
+        Use natural language to describe the Blender object you want—GemBlend interprets your ideas instantly.
       </span>
     ),
     header: <SkeletonOne />,
@@ -300,48 +300,47 @@ const items = [
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Automated Proofreading",
+    title: "Powered by Gemini AI",
     description: (
       <span className="text-sm">
-        Let AI handle the proofreading of your documents.
+        Google’s Gemini AI turns your text prompts into precise Blender-compatible Python code.
       </span>
     ),
     header: <SkeletonTwo />,
     className: "md:col-span-1",
-    icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
+    icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Contextual Suggestions",
+    title: "Visual Preview Support",
     description: (
       <span className="text-sm">
-        Get AI-powered suggestions based on your writing context.
+        Understand what your object will look like with preview hints before downloading the code.
       </span>
     ),
     header: <SkeletonThree />,
     className: "md:col-span-1",
-    icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
+    icon: <IconBoxAlignRightFilled className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Sentiment Analysis",
+    title: "Download as .py File",
     description: (
       <span className="text-sm">
-        Understand the sentiment of your text with AI analysis.
+        Once generated, download your Blender script as a Python file—ready to import into Blender.
       </span>
     ),
     header: <SkeletonFour />,
     className: "md:col-span-2",
-    icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+    icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
   },
-
   {
-    title: "Text Summarization",
+    title: "Save & Access Your Creations",
     description: (
       <span className="text-sm">
-        Summarize your lengthy documents with AI technology.
+        Your generated files are saved to your account, so you can revisit and download them anytime.
       </span>
     ),
     header: <SkeletonFive />,
     className: "md:col-span-1",
-    icon: <IconBoxAlignRightFilled className="h-4 w-4 text-neutral-500" />,
+    icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
   },
 ];

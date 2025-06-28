@@ -3,7 +3,9 @@ import { createRoot } from 'react-dom/client';
 import { ClerkProvider } from '@clerk/clerk-react';
 import './index.css';
 import App from './App.jsx';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import CreateObject from './create-object';
+import Navbar from './components/custom/Navbar';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
@@ -14,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />
+  },
+  {
+    path: '/create-object',
+    element: <CreateObject />
   },
 ])
 
