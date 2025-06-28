@@ -102,6 +102,8 @@ export class BlenderService {
 import os
 import math
 import random
+import bmesh
+import mathutils
 
 # Clear default scene
 bpy.ops.object.select_all(action='SELECT')
@@ -127,6 +129,53 @@ if not any(obj.type == 'LIGHT' for obj in bpy.data.objects):
     bpy.ops.object.light_add(type='SUN', location=(5, 5, 10))
     light = bpy.context.active_object
     light.data.energy = 3
+
+# Smart camera positioning - frame all objects
+mesh_objects = [obj for obj in bpy.data.objects if obj.type == 'MESH']
+if mesh_objects:
+    # Calculate bounding box of all mesh objects
+    all_coords = []
+    for obj in mesh_objects:
+        bbox_corners = [obj.matrix_world @ mathutils.Vector(corner) for corner in obj.bound_box]
+        all_coords.extend(bbox_corners)
+    
+    if all_coords:
+        # Calculate scene bounds
+        xs = [coord.x for coord in all_coords]
+        ys = [coord.y for coord in all_coords]
+        zs = [coord.z for coord in all_coords]
+        
+        center_x = (max(xs) + min(xs)) / 2
+        center_y = (max(ys) + min(ys)) / 2
+        center_z = (max(zs) + min(zs)) / 2
+        
+        # Calculate scene size
+        size_x = max(xs) - min(xs)
+        size_y = max(ys) - min(ys)
+        size_z = max(zs) - min(zs)
+        max_size = max(size_x, size_y, size_z)
+        
+        # Position camera at appropriate distance
+        camera_distance = max(max_size * 2, 8)  # Minimum distance of 8 units
+        
+        # Find camera and position it
+        camera = None
+        for obj in bpy.data.objects:
+            if obj.type == 'CAMERA':
+                camera = obj
+                break
+        
+        if camera:
+            # Position camera to see the scene
+            camera.location = (
+                center_x + camera_distance * 0.7,
+                center_y - camera_distance * 0.7,
+                center_z + camera_distance * 0.5
+            )
+            
+            # Point camera at scene center
+            direction = mathutils.Vector((center_x, center_y, center_z)) - camera.location
+            camera.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
 
 # Set active camera
 for obj in bpy.data.objects:

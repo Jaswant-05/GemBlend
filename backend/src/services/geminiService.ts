@@ -43,7 +43,18 @@ export class GeminiService {
 
 CRITICAL REQUIREMENTS:
 - Use ONLY bpy module (Blender Python API)
-- Create 3D objects using ONLY these primitives:
+- Create 3D objects using these primitives:
+- bpy.ops.mesh.primitive_cube_add()
+- bpy.ops.mesh.primitive_uv_sphere_add()
+- bpy.ops.mesh.primitive_cylinder_add()
+- bpy.ops.mesh.primitive_plane_add()
+- bpy.ops.mesh.primitive_cone_add()
+IMPORTANT: Use Blender 4.x Principled BSDF inputs:
+- Base Color: bsdf.inputs['Base Color'].default_value = (r, g, b, 1.0)
+- Metallic: bsdf.inputs['Metallic'].default_value = 0.0-1.0
+- Roughness: bsdf.inputs['Roughness'].default_value = 0.0-1.0
+- IOR: bsdf.inputs['IOR'].default_value = 1.45
+DO NOT USE: 'Specular' (removed in Blender 4.x)
 - Position objects using location=(x, y, z)
 - Scale objects using obj.scale = (x, y, z)
 - Add materials using:
