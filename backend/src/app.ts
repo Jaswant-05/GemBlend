@@ -4,10 +4,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { clerkMiddleware } from '@clerk/express';
 import fs from 'fs/promises';
-
 //Import database
 import { db } from './services/databaseService';
-
 // Import routes
 import { generateRouter } from './routes/generate';
 import { projectsRouter } from './routes/projects';
@@ -20,7 +18,7 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true
 }));
 app.use(clerkMiddleware());
@@ -30,7 +28,6 @@ app.use(express.urlencoded({ extended: true }));
 // Create required directories
 async function setupDirectories() {
   const outputDir = process.env.OUTPUT_DIR || './output';
-  
   try {
     await fs.mkdir(outputDir, { recursive: true });
     console.log(`✓ Output directory ready: ${outputDir}`);
@@ -39,8 +36,10 @@ async function setupDirectories() {
   }
 }
 
-// Serve static files (generated outputs)
-app.use('/output', express.static(path.join(__dirname, '../output')));
+// Serve static files (generated outputs) - FIXED PATH
+const outputDir = process.env.OUTPUT_DIR || path.join(process.cwd(), 'output');
+app.use('/output', express.static(outputDir));
+console.log(`📁 Serving static files from: ${outputDir}`);
 
 // Routes
 app.use('/api/generate', generateRouter);
@@ -50,9 +49,8 @@ app.use('/api/projects', projectsRouter);
 app.get('/api/health', async (req, res) => {
   try {
     await db.connect();
-    
-    res.json({ 
-      status: 'OK', 
+    res.json({
+      status: 'OK',
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV,
       database: 'connected'
@@ -73,16 +71,15 @@ app.get('/api/test-blender', async (req, res) => {
     const { exec } = require('child_process');
     const { promisify } = require('util');
     const execAsync = promisify(exec);
-    
     const { stdout } = await execAsync('blender --version');
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       blenderVersion: stdout.split('\n')[0],
       message: 'Blender is installed and accessible'
     });
   } catch (error) {
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       error: 'Blender not found or not accessible',
       message: 'Please install Blender and ensure it\'s in your PATH'
     });
@@ -92,7 +89,7 @@ app.get('/api/test-blender', async (req, res) => {
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Error:', err);
-  res.status(500).json({ 
+  res.status(500).json({
     error: 'Internal server error',
     message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
   });
@@ -115,13 +112,12 @@ async function startServer() {
   try {
     await setupDirectories();
     await db.connect();
-    
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📁 Output directory: ${process.env.OUTPUT_DIR || './output'}`);
+      console.log(`📁 Output directory: ${outputDir}`);
       console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
-      console.log(`🗃️  Database: Connected`);
+      console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+      console.log(`🗃️ Database: Connected`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

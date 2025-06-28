@@ -26,7 +26,9 @@ function Navbar() {
                     <Link to="/create-object">
                         <Button className="cursor-pointer font-normal whitespace-nowrap hover:-translate-y-0.5">Create Object</Button>
                     </Link>
-                    <Button className="cursor-pointer font-normal whitespace-nowrap hover:-translate-y-0.5">My Objects</Button>
+                    <Link to="/my-object">
+                        <Button className="cursor-pointer font-normal whitespace-nowrap hover:-translate-y-0.5">My Object</Button>
+                    </Link>
                     <UserButton />
                 </div>
             )}

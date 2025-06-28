@@ -39,45 +39,174 @@ export class GeminiService {
   }
 
   private buildPrompt(userPrompt: string): string {
-    return `You are an expert Blender Python scripter. Generate a Blender Python script for: "${userPrompt}"
+   return `You are an expert Blender Python scripter. Generate a Blender Python script for: "${userPrompt}"
 
-CRITICAL REQUIREMENTS:
-- Use ONLY bpy module (Blender Python API)
-- Create 3D objects using these primitives:
-- bpy.ops.mesh.primitive_cube_add()
-- bpy.ops.mesh.primitive_uv_sphere_add()
-- bpy.ops.mesh.primitive_cylinder_add()
-- bpy.ops.mesh.primitive_plane_add()
-- bpy.ops.mesh.primitive_cone_add()
-IMPORTANT: Use Blender 4.x Principled BSDF inputs:
-- Base Color: bsdf.inputs['Base Color'].default_value = (r, g, b, 1.0)
-- Metallic: bsdf.inputs['Metallic'].default_value = 0.0-1.0
-- Roughness: bsdf.inputs['Roughness'].default_value = 0.0-1.0
-- IOR: bsdf.inputs['IOR'].default_value = 1.45
-DO NOT USE: 'Specular' (removed in Blender 4.x)
-- Position objects using location=(x, y, z)
-- Scale objects using obj.scale = (x, y, z)
-- Add materials using:
-  mat = bpy.data.materials.new(name="MaterialName")
-  mat.use_nodes = True
-  bsdf = mat.node_tree.nodes.get('Principled BSDF')
-  bsdf.inputs['Base Color'].default_value = (r, g, b, 1.0)
-  obj.data.materials.append(mat)
+CRITICAL: Use ONLY the exact syntax below. Test all properties before using.
+ABSOLUTELY FORBIDDEN - THESE WILL CAUSE ERRORS:
+- NO render engine changes (bpy.context.scene.render.engine)
+- NO render operations (bpy.ops.render)
+- NO scene settings (scene.render.*)
+- NO file operations
+- NO camera/light creation
+- NO scene clearing operations
 
-FORBIDDEN:
-- NO file operations (save, render, import)
-- NO scene clearing (select_all, delete)
-- NO camera or light creation
-- NO modifiers, animations, or mesh editing
+BASIC OBJECTS:
+bpy.ops.mesh.primitive_cube_add(location=(x, y, z))
+obj = bpy.context.active_object
+obj.scale = (x, y, z)
+obj.rotation_euler = (x, y, z)
+obj.name = "ObjectName"
 
-OUTPUT FORMAT:
-- Return ONLY Python code
-- NO markdown fences ()
-- NO explanations or text
-- Start with: import bpy
-- Include brief comments in code
+SAFE MATERIAL CREATION - ALWAYS USE TRY/EXCEPT:
+mat = bpy.data.materials.new(name="MaterialName")
+mat.use_nodes = True
+bsdf = mat.node_tree.nodes.get('Principled BSDF')
 
-Generate the script now:`;
+# Always safe - Base Color
+bsdf.inputs['Base Color'].default_value = (r, g, b, 1.0)
+
+# Advanced properties - use safely:
+try:
+    bsdf.inputs['Metallic'].default_value = 0.8  # 0.0 to 1.0
+except KeyError:
+    pass
+
+try:
+    bsdf.inputs['Roughness'].default_value = 0.2  # 0.0 to 1.0  
+except KeyError:
+    pass
+
+try:
+    bsdf.inputs['Transmission'].default_value = 0.9  # 0.0 to 1.0
+except KeyError:
+    pass
+
+try:
+    bsdf.inputs['IOR'].default_value = 1.45  # 1.0 to 2.0
+except KeyError:
+    pass
+
+try:
+    bsdf.inputs['Emission Strength'].default_value = 2.0  # For glowing materials
+except KeyError:
+    pass
+
+obj.data.materials.append(mat)
+
+ADVANCED MATERIAL EXAMPLES:
+
+# Metallic surface
+mat_metal = bpy.data.materials.new(name="Metal")
+mat_metal.use_nodes = True
+bsdf = mat_metal.node_tree.nodes.get('Principled BSDF')
+bsdf.inputs['Base Color'].default_value = (0.7, 0.7, 0.8, 1.0)
+try:
+    bsdf.inputs['Metallic'].default_value = 1.0
+    bsdf.inputs['Roughness'].default_value = 0.1
+except KeyError:
+    pass
+obj.data.materials.append(mat_metal)
+
+# Glass material
+mat_glass = bpy.data.materials.new(name="Glass")
+mat_glass.use_nodes = True
+bsdf = mat_glass.node_tree.nodes.get('Principled BSDF')
+bsdf.inputs['Base Color'].default_value = (0.8, 0.9, 1.0, 1.0)
+try:
+    bsdf.inputs['Transmission'].default_value = 1.0
+    bsdf.inputs['Roughness'].default_value = 0.0
+    bsdf.inputs['IOR'].default_value = 1.45
+except KeyError:
+    pass
+obj.data.materials.append(mat_glass)
+
+# Neon/Emissive material
+mat_neon = bpy.data.materials.new(name="Neon")
+mat_neon.use_nodes = True
+bsdf = mat_neon.node_tree.nodes.get('Principled BSDF')
+bsdf.inputs['Base Color'].default_value = (0.0, 1.0, 0.5, 1.0)
+try:
+    bsdf.inputs['Emission Strength'].default_value = 5.0
+except KeyError:
+    pass
+obj.data.materials.append(mat_neon)
+
+# Rough concrete
+mat_concrete = bpy.data.materials.new(name="Concrete")
+mat_concrete.use_nodes = True
+bsdf = mat_concrete.node_tree.nodes.get('Principled BSDF')
+bsdf.inputs['Base Color'].default_value = (0.6, 0.6, 0.6, 1.0)
+try:
+    bsdf.inputs['Roughness'].default_value = 0.9
+except KeyError:
+    pass
+obj.data.materials.append(mat_concrete)
+
+ADVANCED OBJECT OPERATIONS:
+
+# Duplicate objects
+bpy.ops.mesh.primitive_cube_add(location=(0, 0, 0))
+original = bpy.context.active_object
+for i in range(5):
+    bpy.ops.object.duplicate()
+    obj = bpy.context.active_object
+    obj.location = (i * 2, 0, 0)
+
+# Array of objects with variation
+import random
+for x in range(-10, 11, 2):
+    for y in range(-10, 11, 2):
+        if random.random() > 0.3:  # 70% chance to place object
+            bpy.ops.mesh.primitive_cube_add(location=(x, y, 0))
+            obj = bpy.context.active_object
+            obj.scale = (random.uniform(0.5, 2.0), random.uniform(0.5, 2.0), random.uniform(1, 5))
+
+# Complex shapes using primitives
+# Tower structure
+for i in range(10):
+    bpy.ops.mesh.primitive_cube_add(location=(0, 0, i * 2))
+    obj = bpy.context.active_object
+    obj.scale = (2 - i * 0.1, 2 - i * 0.1, 1)
+
+SAFE PRIMITIVES:
+- bpy.ops.mesh.primitive_cube_add(location=(x,y,z), scale=(x,y,z))
+- bpy.ops.mesh.primitive_uv_sphere_add(location=(x,y,z), radius=r)
+- bpy.ops.mesh.primitive_cylinder_add(location=(x,y,z), radius=r, depth=d)
+- bpy.ops.mesh.primitive_plane_add(location=(x,y,z), size=s)
+- bpy.ops.mesh.primitive_cone_add(location=(x,y,z), radius1=r1, depth=d)
+- bpy.ops.mesh.primitive_torus_add(location=(x,y,z), major_radius=r1, minor_radius=r2)
+
+ADVANCED POSITIONING:
+- obj.location = (x, y, z)
+- obj.rotation_euler = (math.radians(x), math.radians(y), math.radians(z))  # Use degrees
+- obj.scale = (x, y, z)
+
+SAFE IMPORTS:
+import bpy
+import math
+import random
+
+COLOR PALETTE (use these for consistency):
+# Cyberpunk colors
+NEON_BLUE = (0.0, 0.5, 1.0, 1.0)
+NEON_PINK = (1.0, 0.0, 0.5, 1.0)
+NEON_GREEN = (0.0, 1.0, 0.3, 1.0)
+CYBER_PURPLE = (0.5, 0.0, 1.0, 1.0)
+DARK_METAL = (0.2, 0.2, 0.3, 1.0)
+BRIGHT_WHITE = (0.9, 0.9, 1.0, 1.0)
+
+RULES:
+1. Always wrap advanced material properties in try/except
+2. Use math.radians() for rotations in degrees
+3. Use random for variation but keep it controlled
+4. Create 20-50 objects for complex scenes (more allowed now)
+5. Use coordinate ranges -20 to +20 for large scenes
+6. Layer objects at different heights for depth
+7. Group similar objects together spatially
+
+OUTPUT: Only Python code. No explanations. Start with imports.
+
+Generate script:`;
   }
 
   private cleanScript(content: string): string {
