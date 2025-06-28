@@ -2,7 +2,6 @@
 import { SignInButton, UserButton, useUser } from '@clerk/clerk-react'
 
 import { motion } from "motion/react";
-import { FeatureBentoGrid } from "./FeatureBentoGrid";
 import { Button } from '../ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from './NavBar';
