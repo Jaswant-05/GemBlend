@@ -11,7 +11,7 @@ function Navbar() {
                     <img
                         src="/logo.png"
                         alt="Logo"
-                        className="w-40 h-auto object-contain"
+                        className="w-50 h-auto object-contain"
                     />
                 </Link>
             </div>
