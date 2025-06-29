@@ -320,7 +320,7 @@ export default function MyObjects() {
               </p>
               {!searchTerm && (
                 <Button
-                  variant="slate"
+                  variant="outline"
                   onClick={() => window.location.href = '/create-object'}
                   className="cursor-pointer transition-all duration-300 hover:-translate-y-0.5"
                 >
