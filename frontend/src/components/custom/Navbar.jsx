@@ -17,18 +17,20 @@ function Navbar() {
             </div>
             {!user ? (
                 <SignInButton mode="modal">
-                    <Button className="cursor-pointer w-24 md:w-32 font-normal whitespace-nowrap hover:-translate-y-0.5">
-                        Get Started
+                    <Button variant="slate" className="cursor-pointer w-24 md:w-32 font-light whitespace-nowrap hover:-translate-y-0.5">
+                        Log in
                     </Button>
                 </SignInButton>
             ) : (
                 <div className='flex items-center gap-5'>
                     <Link to="/create-object">
-                        <Button className="cursor-pointer font-normal whitespace-nowrap hover:-translate-y-0.5">Create Object</Button>
+                        <Button variant="slate" className="cursor-pointer font-light whitespace-nowrap hover:-translate-y-0.5">Create Object</Button>
                     </Link>
+
                     <Link to="/my-objects">
                         <Button className="cursor-pointer font-normal whitespace-nowrap hover:-translate-y-0.5">My Objects</Button>
                     </Link>
+
                     <UserButton />
                 </div>
             )}
