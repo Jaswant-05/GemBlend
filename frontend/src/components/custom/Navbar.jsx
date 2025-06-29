@@ -17,8 +17,8 @@ function Navbar() {
             </div>
             {!user ? (
                 <SignInButton mode="modal">
-                    <Button variant="slate" className="cursor-pointer w-24 md:w-32 font-light whitespace-nowrap hover:-translate-y-0.5">
-                        Log in
+                    <Button variant="slate" className="cursor-pointer w-24 md:w-32 font-normal whitespace-nowrap hover:-translate-y-0.5">
+                        Sign in
                     </Button>
                 </SignInButton>
             ) : (
@@ -26,7 +26,6 @@ function Navbar() {
                     <Link to="/create-object">
                         <Button variant="slate" className="cursor-pointer font-light whitespace-nowrap hover:-translate-y-0.5">Create Object</Button>
                     </Link>
-
                     <Link to="/my-objects">
                         <Button className="cursor-pointer font-normal whitespace-nowrap hover:-translate-y-0.5">My Objects</Button>
                     </Link>
