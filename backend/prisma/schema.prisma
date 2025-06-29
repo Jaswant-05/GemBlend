@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  
+  // User info from Clerk
+  userId      String   // Clerk user ID
+  userEmail   String?  // Optional: store email for convenience
+  
+  // Project data
+  prompt      String
+  script      String?
+  status      ProjectStatus @default(PENDING)
+  
+  // File paths
+  blendFile   String?
+  previewImage String?
+  
+  // Execution details
+  executionTime Int?     // milliseconds
+  errorMessage  String?
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("projects")
+}
+
+enum ProjectStatus {
+  PENDING
+  GENERATING
+  COMPLETED
+  FAILED
+}

@@ -6,6 +6,7 @@ import App from './App.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CreateObject from './create-object';
 import Navbar from './components/custom/Navbar';
+import MyObjects from './my-objects';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: '/create-object',
     element: <CreateObject />
+  },
+  {
+    path: '/my-objects',
+    element: <MyObjects />
   },
 ])
 
