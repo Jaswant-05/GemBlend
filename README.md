@@ -55,7 +55,8 @@ You’ll need these installed:
 
     ```
     npx prisma generate
-    npx prisma migrate dev --name init
+    npx prisma db push 
+    npx ts-node prisma/seed.ts
     ```
 
 5. **Run the website**
