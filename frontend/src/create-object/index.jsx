@@ -181,7 +181,7 @@ export default function CreateObject() {
                     )}
 
                     {currentProject && (
-                        <div className="mt-8 flex flex-col items-center">
+                        <div className="mt-8 flex flex-col items-center pb-12">
                             {/* FIXED IMAGE SOURCE */}
                             <img
                                 src={`http://localhost:3001${currentProject.previewImage}`}
@@ -200,7 +200,7 @@ export default function CreateObject() {
                                 <Button
                                     onClick={handleDownload}
                                     variant="outline"
-                                    className="mt-2 flex items-center gap-2"
+                                    className="cursor-pointer mt-2 flex items-center gap-2"
                                 >
                                     <Download className="h-4 w-4" />
                                     Download .blend File

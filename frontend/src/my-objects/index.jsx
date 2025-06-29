@@ -331,6 +331,7 @@ export default function MyObjects() {
                 <Button
                   onClick={() => setSearchTerm('')}
                   variant="outline"
+                  className="cursor-pointer"
                 >
                   Clear Search
                 </Button>
@@ -440,7 +441,7 @@ export default function MyObjects() {
                         <Button
                           onClick={() => handleDownload(project)}
                           disabled={downloadLoading === project.id}
-                          className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                          className="cursor-pointer flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
                         >
                           {downloadLoading === project.id ? (
                             <>
