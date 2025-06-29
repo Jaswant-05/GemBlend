@@ -61,7 +61,7 @@ export default function Hero() {
           }}
           className="relative z-10 mx-auto max-w-xl py-4 text-center text-xl font-normal text-neutral-600 dark:text-neutral-400">
           With AI, you can create 3D Blender objects in seconds, not hours.
-          Try our state-of-the-art generative tools to turn your ideas into
+          Try our state-of-the-art generative tool to turn your ideas into
           ready-to-use Blender files.
         </motion.p>
         <motion.div
