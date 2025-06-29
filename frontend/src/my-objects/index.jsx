@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Download, Trash2, Search, Eye, ImageIcon, AlertCircle } from "lucide-react";
-import { useAuth } from "@clerk/clerk-react";
+import { SignInButton, useAuth } from "@clerk/clerk-react";
 import Navbar from "@/components/custom/Navbar";
 
 export default function MyObjects() {
@@ -30,21 +30,21 @@ export default function MyObjects() {
   // Fetch user's projects
   const fetchProjects = async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await authenticatedFetch(
         `http://localhost:3001/api/projects?userId=${userId}&limit=50`
       );
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         setProjects(result.projects || []);
         console.log('Fetched projects:', result.projects); // Debug log
@@ -71,7 +71,7 @@ export default function MyObjects() {
 
     try {
       console.log(`Downloading project ${project.id} for user ${userId}`); // Debug log
-      
+
       const response = await authenticatedFetch(
         `http://localhost:3001/api/projects/${project.id}/download/blend?userId=${userId}`,
         {
@@ -84,7 +84,7 @@ export default function MyObjects() {
       if (response.ok) {
         const blob = await response.blob();
         console.log('Downloaded blob size:', blob.size); // Debug log
-        
+
         if (blob.size === 0) {
           throw new Error('Downloaded file is empty');
         }
@@ -97,19 +97,19 @@ export default function MyObjects() {
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-        
+
         console.log('Download completed successfully'); // Debug log
       } else {
         const errorText = await response.text();
         let errorMessage = 'Download failed';
-        
+
         try {
           const errorData = JSON.parse(errorText);
           errorMessage = errorData.error || errorMessage;
         } catch {
           errorMessage = errorText || errorMessage;
         }
-        
+
         console.error('Download failed:', errorMessage); // Debug log
         setError(errorMessage);
       }
@@ -152,7 +152,7 @@ export default function MyObjects() {
 
     setDeleteLoading(projectId);
     setError(null);
-    
+
     try {
       const response = await authenticatedFetch(
         `http://localhost:3001/api/projects/${projectId}`,
@@ -223,9 +223,13 @@ export default function MyObjects() {
           <div className="text-center">
             <AlertCircle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <p className="text-xl text-gray-500 mb-4">Please sign in to view your objects.</p>
-            <Button onClick={() => window.location.href = '/sign-in'}>
-              Sign In
-            </Button>
+            <SignInButton mode="modal">
+              <Button
+                variant="slate"
+                className="cursor-pointer">
+                Sign In
+              </Button>
+            </SignInButton>
           </div>
         </div>
       </div>
@@ -238,19 +242,20 @@ export default function MyObjects() {
       <div className="sm:px-10 md:px-32 lg:px-56 xl:px-10 px-5 mt-10 pb-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div>
-            <h2 className="font-bold text-3xl mb-2">My Objects</h2>
+            <h2 className="font-bold text-3xl mb-2 text-slate-800">My Objects</h2>
             <p className="text-gray-500 text-xl">
               Manage and download your generated Blender objects
             </p>
           </div>
-          
-          <div className="flex gap-4 mt-4 md:mt-0">
+
+          <div className="text-slate-800 flex gap-4 mt-4 md:mt-0">
             {/* Refresh Button */}
             <Button
               onClick={handleRefresh}
               variant="outline"
               size="sm"
               disabled={loading}
+              className="cursor-pointer"
             >
               {loading ? (
                 <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
@@ -258,7 +263,7 @@ export default function MyObjects() {
                 'Refresh'
               )}
             </Button>
-            
+
             {/* Search */}
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -281,9 +286,9 @@ export default function MyObjects() {
                 <p className="text-red-600 font-medium">Error</p>
                 <p className="text-red-600 text-sm">{error}</p>
               </div>
-              <Button 
-                onClick={() => setError(null)} 
-                variant="ghost" 
+              <Button
+                onClick={() => setError(null)}
+                variant="ghost"
                 size="sm"
                 className="text-red-600 hover:text-red-700"
               >
@@ -304,25 +309,26 @@ export default function MyObjects() {
           <div className="text-center py-20">
             <div className="bg-white rounded-lg border border-gray-200 p-12 max-w-md mx-auto">
               <Eye className="mx-auto h-16 w-16 text-gray-400 mb-6" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+              <h3 className="text-xl font-semibold text-slate-800 mb-3">
                 {searchTerm ? 'No matching projects found' : 'No projects yet'}
               </h3>
               <p className="text-gray-500 mb-6">
-                {searchTerm 
-                  ? 'Try adjusting your search terms or create a new project' 
+                {searchTerm
+                  ? 'Try adjusting your search terms or create a new project'
                   : 'Create your first 3D object to get started'
                 }
               </p>
               {!searchTerm && (
-                <Button 
-                  onClick={() => window.location.href = '/create'}
-                  className="transition-all duration-300 hover:-translate-y-0.5"
+                <Button
+                  variant="slate"
+                  onClick={() => window.location.href = '/create-object'}
+                  className="cursor-pointer transition-all duration-300 hover:-translate-y-0.5"
                 >
                   Create Your First Object
                 </Button>
               )}
               {searchTerm && (
-                <Button 
+                <Button
                   onClick={() => setSearchTerm('')}
                   variant="outline"
                 >
@@ -339,16 +345,15 @@ export default function MyObjects() {
                   {/* Card Header */}
                   <div className="p-6 pb-4">
                     <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 flex-1 pr-2">
+                      <h3 className="text-lg font-semibold text-slate-800 line-clamp-2 flex-1 pr-2">
                         "{project.prompt || 'Untitled Project'}"
                       </h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium flex-shrink-0 ${
-                        project.status?.toLowerCase() === 'completed' 
-                          ? 'bg-green-100 text-green-800' 
-                          : project.status?.toLowerCase() === 'failed'
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium flex-shrink-0 ${project.status?.toLowerCase() === 'completed'
+                        ? 'bg-green-100 text-green-800'
+                        : project.status?.toLowerCase() === 'failed'
                           ? 'bg-red-100 text-red-800'
                           : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                        }`}>
                         {project.status || 'unknown'}
                       </span>
                     </div>
@@ -356,7 +361,7 @@ export default function MyObjects() {
                       Created {formatDate(project.createdAt)}
                     </p>
                   </div>
-                  
+
                   {/* Card Content */}
                   <div className="px-6 pb-6">
                     {/* PREVIEW IMAGE SECTION */}
@@ -382,7 +387,7 @@ export default function MyObjects() {
                             }}
                           />
                           {/* Image download overlay */}
-                          <div 
+                          <div
                             className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-all duration-200 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer"
                             onClick={() => handleImageDownload(project)}
                           >
@@ -412,7 +417,7 @@ export default function MyObjects() {
                         </div>
                       )}
                     </div>
-                    
+
                     {/* Project Details */}
                     <div className="space-y-3 mb-6">
                       {project.executionTime && (
@@ -450,12 +455,12 @@ export default function MyObjects() {
                           )}
                         </Button>
                       )}
-                      
+
                       <Button
                         onClick={() => handleDelete(project.id)}
                         variant="outline"
                         size="sm"
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                        className="cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
                         disabled={deleteLoading === project.id}
                       >
                         {deleteLoading === project.id ? (

@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <CreateObject />
   },
   {
-    path: '/my-object',
+    path: '/my-objects',
     element: <MyObjects />
   },
 ])

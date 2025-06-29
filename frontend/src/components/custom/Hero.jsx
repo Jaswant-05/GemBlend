@@ -30,7 +30,7 @@ export default function Hero() {
       </div>
       <div className="px-4 py-10 md:py-20">
         <h1
-          className="relative z-10 mx-auto max-w-4xl text-center text-2xl font-bold text-slate-700 md:text-4xl lg:text-7xl dark:text-slate-300">
+          className="relative z-10 mx-auto max-w-6xl text-center text-2xl font-bold text-slate-700 md:text-4xl lg:text-7xl dark:text-slate-300">
           {"Build Blender objects with just a few words"
             .split(" ")
             .map((word, index) => (
@@ -59,7 +59,7 @@ export default function Hero() {
             duration: 0.3,
             delay: 0.8,
           }}
-          className="relative z-10 mx-auto max-w-xl py-4 text-center text-lg font-normal text-neutral-600 dark:text-neutral-400">
+          className="relative z-10 mx-auto max-w-xl py-4 text-center text-xl font-normal text-neutral-600 dark:text-neutral-400">
           With AI, you can create 3D Blender objects in seconds, not hours.
           Try our state-of-the-art generative tools to turn your ideas into
           ready-to-use Blender files.
@@ -78,13 +78,13 @@ export default function Hero() {
           className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4">
           {!user ? (
             <SignInButton mode="modal">
-              <Button className="cursor-pointer w-60 text-md font-normal whitespace-nowrap hover:-translate-y-0.5">
+              <Button variant="slate" size="lg" className="cursor-pointer w-72 text-lg font-normal whitespace-nowrap py-4 px-8 hover:-translate-y-0.5">
                 Get Started
               </Button>
             </SignInButton>
           ) : (
             <Link to="/create-object">
-              <Button className="cursor-pointer w-60 text-md font-normal whitespace-nowrap hover:-translate-y-0.5">
+              <Button variant="slate" size="lg" className="cursor-pointer w-72 text-lg font-normal whitespace-nowrap py-4 px-8 hover:-translate-y-0.5">
                 Create Object
               </Button>
             </Link>
@@ -107,7 +107,7 @@ export default function Hero() {
           <div
             className="w-full overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700">
             <img
-              src="https://assets.aceternity.com/pro/aceternity-landing.webp"
+              src="/landing.png"
               alt="Landing page preview"
               className="aspect-[16/9] h-auto w-full object-cover"
               height={1000}
