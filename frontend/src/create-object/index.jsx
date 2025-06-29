@@ -31,14 +31,14 @@ export default function CreateObject() {
         <div>
             <Navbar />
             <div className="sm:px-10 md:px-32 lg:px-56 xl:px-10 px-5 mt-10">
-                <h2 className="font-bold text-3xl mb-2">Describe your Blender object</h2>
+                <h2 className="font-bold text-3xl mb-2 text-slate-800">Describe your Blender object</h2>
                 <p className="mb-8 text-gray-500 text-xl">
                     Enter a prompt and our AI will generate a Blender-ready PNG preview for you.
                 </p>
 
                 <div className="flex flex-col gap-8 max-w-xl mx-auto">
                     <div>
-                        <Label htmlFor="prompt" className="text-lg font-medium mb-2 block">
+                        <Label htmlFor="prompt" className="text-lg font-medium mb-2 block text-slate-800">
                             What do you want to create?
                         </Label>
                         <Input
@@ -54,9 +54,10 @@ export default function CreateObject() {
 
                     <div className="flex justify-end">
                         <Button
+                            variant="slate"
                             disabled={loading || !prompt.trim()}
                             onClick={handleGenerate}
-                            className="transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 min-w-[160px] flex items-center justify-center"
+                            className="cursor-pointer font-normal transition-all duration-300 hover:-translate-y-0.5 min-w-[160px] flex items-center justify-center"
                         >
                             {loading ? (
                                 <>

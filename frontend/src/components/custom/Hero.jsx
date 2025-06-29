@@ -2,7 +2,6 @@
 import { SignInButton, UserButton, useUser } from '@clerk/clerk-react'
 
 import { motion } from "motion/react";
-import { FeatureBentoGrid } from "./FeatureBentoGrid";
 import { Button } from '../ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from './NavBar';
@@ -62,7 +61,7 @@ export default function Hero() {
           }}
           className="relative z-10 mx-auto max-w-xl py-4 text-center text-lg font-normal text-neutral-600 dark:text-neutral-400">
           With AI, you can create 3D Blender objects in seconds, not hours.
-          Try our state-of-the-art generative tools to turn your ideas into
+          Try our state-of-the-art generative tool to turn your ideas into
           ready-to-use Blender files.
         </motion.p>
         <motion.div
@@ -79,13 +78,13 @@ export default function Hero() {
           className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4">
           {!user ? (
             <SignInButton mode="modal">
-              <Button className="cursor-pointer w-60 text-md font-normal whitespace-nowrap hover:-translate-y-0.5">
+              <Button variant="slate" className="cursor-pointer w-60 text-md font-normal whitespace-nowrap hover:-translate-y-0.5">
                 Get Started
               </Button>
             </SignInButton>
           ) : (
             <Link to="/create-object">
-              <Button className="cursor-pointer w-60 text-md font-normal whitespace-nowrap hover:-translate-y-0.5">
+              <Button variant="slate" className="cursor-pointer w-60 text-lg font-normal whitespace-nowrap hover:-translate-y-0.5">
                 Create Object
               </Button>
             </Link>
